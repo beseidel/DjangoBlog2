@@ -10,7 +10,6 @@
       <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/workblog2.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/blogs/__init__.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/blogs/admin.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/blogs/apps.py" afterDir="false" />
