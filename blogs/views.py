@@ -123,6 +123,8 @@ from django.http import HttpResponse
 # ************
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+# Use this for builtin class based views
 from django.views.generic import (
     ListView,
     DetailView,
@@ -130,23 +132,33 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+
 from .models import Post
 
+# Function based views below
+# def home(request):
+#     context = {
+#         'posts': Post.objects.all()
+#     }
+#     return render(request, 'home.html', context)
 
-def home(request):
-    context = {
-        'posts': Post.objects.all()
-    }
-    return render(request, 'home.html', context)
 
-
+# class based views and inherit from ListView  looks for a templatename <app?/<modle?.html  so we need to set template name for class views
 class PostListView(ListView):
     model = Post
-    template_name = 'home.html'  # <app>/<model>_<viewtype>.html
+
+    # need to set template = to be home.html in order to work
+    template_name = 'home.html'  # could name template this but we can convert here  <app>/<model>_<viewtype>.html
+
+    # need to set the object = to posts here which the template is looping over
+    # or change the template looping variable posts to object
     context_object_name = 'posts'
+
+    # need to reorder the posts which can be done by setting the variable ordering to -dateposted
     ordering = ['-date_posted']
 
 
+# This is a typical class view using
 class PostDetailView(DetailView):
     model = Post
 
@@ -155,7 +167,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'content']
 
+# Need to override the form
     def form_valid(self, form):
+        # run the form method to the current logged in user
         form.instance.author = self.request.user
         return super().form_valid(form)
 
@@ -179,15 +193,16 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = '/'
 
+    # Function to make sure author is the registered user to do the deleting
     def test_func(self):
         post = self.get_object()
         if self.request.user == post.author:
             return True
         return False
 
-
 def about(request):
     return render(request, 'about.html', {'title': 'About'})
+
 
 
 # queryset based

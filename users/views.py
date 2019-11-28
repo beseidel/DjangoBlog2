@@ -46,4 +46,3 @@ def register(request):
 # @login_required
 # def account():
 #     return render_template('account.html', title='Account')
-#

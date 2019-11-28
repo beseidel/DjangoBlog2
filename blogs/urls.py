@@ -36,6 +36,8 @@ from . import views
 # function view import statement
 
 from django.urls import path
+
+# class based urls below
 from .views import (
     PostListView,
     PostDetailView,
@@ -44,22 +46,34 @@ from .views import (
     PostDeleteView
 )
 
+# function based views use this statement
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='blogs-home'),
-    path('index/', views.home, name='blogs-home'),
-    path('about/', views.about, name='blogs-about'),
+    # routes for function based views
+    # path('', views.home, name='blogs-home'),
+    # path('index/', views.home, name='blogs-home'),
+    # path('about/', views.about, name='blogs-about'),
+    #  end routes for function based views
 
-    # create, read, update, delete
 
+# create, read, update, delete
+# class based urls below
+#     uses template home.html and this has to be converted using .as_view() function invoked
     path('', PostListView.as_view(), name='blogs-home'),
+
+    # uses post_detail.html template
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+
+    # Expects post_form.html template. it does not expect post_create like you might think django uses post_form instead
     path('post/new/', PostCreateView.as_view(), name='post-create'),
+
+   # also uses post_form.html template and shares it with the above post/new
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
+
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+
     path('about/', views.about, name='blogs-about'),
 
 ]
-
 
