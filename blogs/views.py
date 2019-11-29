@@ -123,7 +123,6 @@ from django.http import HttpResponse
 # ************
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
 # Use this for builtin class based views
 from django.views.generic import (
     ListView,
@@ -136,11 +135,11 @@ from django.views.generic import (
 from .models import Post
 
 # Function based views below
-# def home(request):
-#     context = {
-#         'posts': Post.objects.all()
-#     }
-#     return render(request, 'home.html', context)
+def home(request):
+    context = {
+        'posts': Post.objects.all()
+    }
+    return render(request, 'blogs/home.html', context)
 
 
 # class based views and inherit from ListView  looks for a templatename <app?/<modle?.html  so we need to set template name for class views
@@ -148,7 +147,7 @@ class PostListView(ListView):
     model = Post
 
     # need to set template = to be home.html in order to work
-    template_name = 'home.html'  # could name template this but we can convert here  <app>/<model>_<viewtype>.html
+    template_name = 'blogs/home.html'  # could name template this but we can convert here  <app>/<model>_<viewtype>.html
 
     # need to set the object = to posts here which the template is looping over
     # or change the template looping variable posts to object
@@ -156,6 +155,18 @@ class PostListView(ListView):
 
     # need to reorder the posts which can be done by setting the variable ordering to -dateposted
     ordering = ['-date_posted']
+
+
+class UserPostListView(ListView):
+    model = Post
+    template_name = 'blog/user_posts.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return Post.objects.filter(author=user).order_by('-date_posted')
+
 
 
 # This is a typical class view using
@@ -201,7 +212,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 def about(request):
-    return render(request, 'about.html', {'title': 'About'})
+    return render(request, 'blogs/about.html', {'title': 'About'})
 
 
 
