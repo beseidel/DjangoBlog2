@@ -36,3 +36,8 @@ class Post(models.Model):
     # need to get an absolute url...not sure why???
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
+
+
+
+
+

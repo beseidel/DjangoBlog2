@@ -1,8 +1,6 @@
 
 
-
-
-#queryset based
+# queryset based
 #
 # from django.shortcuts import render
 # from .models import Post
@@ -135,6 +133,8 @@ from django.views.generic import (
 from .models import Post
 
 # Function based views below
+
+
 def home(request):
     context = {
         'posts': Post.objects.all()
@@ -142,12 +142,13 @@ def home(request):
     return render(request, 'blogs/home.html', context)
 
 
-# class based views and inherit from ListView  looks for a templatename <app?/<modle?.html  so we need to set template name for class views
+# class based views and inherit from ListView  looks for a templatename <app?/<model?.html  so we need to set template name for class views
 class PostListView(ListView):
     model = Post
 
     # need to set template = to be home.html in order to work
-    template_name = 'blogs/home.html'  # could name template this but we can convert here  <app>/<model>_<viewtype>.html
+    # could name template this but we can convert here  <app>/<model>_<viewtype>.html
+    template_name = 'blogs/post_form.html'
 
     # need to set the object = to posts here which the template is looping over
     # or change the template looping variable posts to object
@@ -157,7 +158,7 @@ class PostListView(ListView):
     ordering = ['-date_posted']
 
 
-class UserPostListView(ListView):
+class UserPostListView(ListView,CreateView):
     model = Post
     template_name = 'blog/user_posts.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'posts'
@@ -166,7 +167,6 @@ class UserPostListView(ListView):
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted')
-
 
 
 # This is a typical class view using
@@ -211,9 +211,9 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+
 def about(request):
     return render(request, 'blogs/about.html', {'title': 'About'})
-
 
 
 # queryset based
@@ -240,8 +240,6 @@ def about(request):
 # from .models import Post
 
 # Create your views here.
-
-from django.http import HttpResponse
 
 # function based
 # def index(request):

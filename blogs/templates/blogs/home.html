@@ -1,5 +1,19 @@
 {% extends "blogs/base.html" %}
+<!-- {% load crispy_forms_tags %} -->
 {% block content %}
+
+
+<form method="POST">
+  {% csrf_token %}
+  <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Blog Post</legend>
+     {{ form|crispy }}
+  </fieldset>
+  <div class="form-group">
+      <button class="btn btn-outline-info" type="submit">Post</button>
+  </div>
+</form>
+
     {% for post in posts %}
         <article class="media content-section">
           <div class="media-body">
@@ -12,6 +26,6 @@
           </div>
         </article>
     {% endfor %}
-{% endblock content %}
+{% end block content %}
 
 
